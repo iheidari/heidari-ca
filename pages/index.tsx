@@ -34,7 +34,7 @@ const Home: NextPage = () => {
           <a href="https://github.com/iheidari/">
             <Github />
           </a>
-          <a href="https://twitter.com/imxnab/">
+          <a href="https://twitter.com/ximaneshon/">
             <Tweeter />
           </a>
         </div>
