@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Github from "../components/logo/github";
 import Tweeter from "../components/logo/Tweeter";
+import Linkedin from "../components/logo/Linkedin";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -36,6 +37,9 @@ const Home: NextPage = () => {
           </a>
           <a href="https://twitter.com/ximaneshon/">
             <Tweeter />
+          </a>
+          <a href="https://www.linkedin.com/in/iheidari/">
+            <Linkedin />
           </a>
         </div>
       </main>
