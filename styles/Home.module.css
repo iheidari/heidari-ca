@@ -33,6 +33,6 @@
 
 .socials {
   display: flex;  
-  gap: 16px;
+  gap: 24px;
   justify-content: space-between;
 }

@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
-import Github from "../components/logo/github";
-import Tweeter from "../components/logo/Tweeter";
+import Github from "../components/logo/Github";
+import Twitter from "../components/logo/Twitter";
 import Linkedin from "../components/logo/Linkedin";
+import Youtube from "../components/logo/Youtube";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -32,14 +32,20 @@ const Home: NextPage = () => {
         </div>
 
         <div className={styles.socials}>
-          <a href="https://github.com/iheidari/">
+          <a href="https://github.com/iheidari/" title="github">
             <Github />
           </a>
-          <a href="https://twitter.com/ximaneshon/">
-            <Tweeter />
+          <a href="https://twitter.com/ximaneshon/" title="twitter">
+            <Twitter />
           </a>
-          <a href="https://www.linkedin.com/in/iheidari/">
+          <a href="https://www.linkedin.com/in/iheidari/" title="linkedin">
             <Linkedin />
+          </a>
+          <a
+            href="https://www.youtube.com/channel/UC0Yh_8K94hOmtErgCvsR3Og"
+            title="youtube"
+          >
+            <Youtube />
           </a>
         </div>
       </main>
