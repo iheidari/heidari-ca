@@ -1,0 +1,20 @@
+.list {
+  composes: list from "@/components/recipes.module.css";
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.link {
+  composes: iconControl buttonNeutral from "@/components/recipes.module.css";
+  color: var(--color-muted-foreground);
+}
+
+.link:hover {
+  color: var(--color-foreground);
+}
+
+.sm .link {
+  background: transparent;
+  border-color: transparent;
+}

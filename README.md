@@ -1,34 +1,64 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# heidari.ca
 
-## Getting Started
+Personal site and portfolio for Iman Heidari — built with Next.js (App Router), React Server Components, and CSS Modules. No UI framework, no runtime dependencies beyond Next/React.
 
-First, run the development server:
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
+pnpm install
+pnpm dev          # http://localhost:3000
+pnpm build
+pnpm format       # Biome, writes
+pnpm lint         # Biome check + ESLint
+pnpm typecheck    # next typegen + tsc --noEmit
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`pnpm typecheck` runs `next typegen` first because the route helper types
+(`PageProps<…>`, `LayoutProps<…>`) are generated into the gitignored `.next/`
+directory. On a fresh clone, run it once before trusting the editor.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, and build on
+every pull request.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Editing content
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Copy that changes often lives in plain TypeScript files — no CMS needed:
 
-## Learn More
+- `content/site.ts` — name, role, tagline, intro, email, socials, tech stack, availability badge, and the section headings/leads used on the home and blog pages
+- `content/projects.ts` — portfolio entries (title, summary, year, tags, optional repo/live links)
+- `content/posts.ts` — blog posts, exported pre-sorted (newest first) alongside `localPosts()`/`findLocalPost()`, so no route re-sorts or re-scans
 
-To learn more about Next.js, take a look at the following resources:
+A post is either `kind: "local"` with a `body`, or `kind: "external"` with an
+`href` — there is no bodyless state, so `/blog/[slug]` never renders a
+placeholder. `content/posts.ts` ships empty; add real posts, or swap the route
+for MDX/a CMS when there is long-form content to publish.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> **Before going live:** `content/projects.ts` still contains three placeholder
+> entries ("Project One/Two/Three"). Replace them with real work.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Theming
 
-## Deploy on Vercel
+Light/dark is driven by a `data-theme` attribute on `<html>`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Design tokens (color, spacing, radius, type scale, control size, motion) live in `app/globals.css`
+- `components/recipes.module.css` holds the shared control/button/surface/chip recipes; component stylesheets pull them in with `composes:`
+- `lib/theme.ts` holds the inline script that applies the stored or system theme before first paint
+- `components/ThemeToggle.tsx` flips the attribute and persists the choice to `localStorage`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Page metadata is declared once, in `app/layout.tsx`, using relative `./` URLs —
+they resolve against each route's own path, so every page gets its own canonical
+and `og:url` for free. Routes set only `title` and `description`; Next fills the
+Open Graph fields from those. Don't add an `openGraph` block to a child route:
+it replaces the parent's wholesale and drops the generated `app/opengraph-image`.
+
+## Structure
+
+```
+app/          routes, layout, global tokens, robots/sitemap/OG image
+components/   header, footer, cards, icons, theme toggle, SmartLink
+content/      site copy, projects, posts
+lib/          theme helpers, date formatting
+```
+
+Imports use the `@/*` alias (`@/components/…`, `@/content/…`, `@/lib/…`) rather
+than relative paths.

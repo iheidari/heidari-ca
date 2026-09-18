@@ -1,0 +1,34 @@
+.toggle {
+  composes: iconControl buttonNeutral from "@/components/recipes.module.css";
+  color: var(--color-foreground);
+  cursor: pointer;
+}
+
+.icons {
+  display: grid;
+  place-items: center;
+}
+
+.sun,
+.moon {
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+/* The theme attribute decides which glyph shows, so server and client agree. */
+.moon {
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.6);
+}
+
+:global([data-theme="dark"]) .sun {
+  opacity: 0;
+  transform: rotate(45deg) scale(0.6);
+}
+
+:global([data-theme="dark"]) .moon {
+  opacity: 1;
+  transform: none;
+}
