@@ -4,7 +4,15 @@ import SmartLink from "@/components/SmartLink";
 import type { Post } from "@/content/posts";
 import styles from "./PostList.module.css";
 
-export default function PostList({ posts }: { posts: readonly Post[] }) {
+type Props = {
+  posts: readonly Post[];
+  /** Depends on what sits above the list: `h2` on /blog, `h3` under a section. */
+  headingLevel?: "h2" | "h3";
+};
+
+export default function PostList({ posts, headingLevel = "h3" }: Props) {
+  const Heading = headingLevel;
+
   return (
     <ul className={styles.list} role="list">
       {posts.map((post) => (
@@ -13,9 +21,9 @@ export default function PostList({ posts }: { posts: readonly Post[] }) {
             className={styles.item}
             href={post.kind === "external" ? post.href : `/blog/${post.slug}`}
           >
-            <PostMeta date={post.date} readingTime={post.readingTime} />
+            <PostMeta date={post.date} readingMinutes={post.readingMinutes} />
 
-            <h3 className={styles.title}>
+            <Heading className={styles.title}>
               {post.title}
               {post.kind === "external" ? (
                 <ArrowUpRightIcon
@@ -24,7 +32,7 @@ export default function PostList({ posts }: { posts: readonly Post[] }) {
                   height={16}
                 />
               ) : null}
-            </h3>
+            </Heading>
 
             <p className={styles.excerpt}>{post.excerpt}</p>
           </SmartLink>

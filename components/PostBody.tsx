@@ -1,11 +1,16 @@
-import Image from "next/image";
 import type { ReactNode } from "react";
+import ProseImage from "@/components/ProseImage";
 import SmartLink from "@/components/SmartLink";
 import type { PostBlock } from "@/content/posts";
 import styles from "./PostBody.module.css";
 
-/** `[label](href)` · `**bold**` · `` `code` `` — the whole inline vocabulary. */
-const INLINE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*|`([^`]+)`/g;
+/**
+ * `[label](href)` · `**bold**` · `*emphasis*` · `` `code` `` — the whole inline
+ * vocabulary. `**bold**` is listed before `*emphasis*` so a bold run is never
+ * mis-read as emphasis wrapping a stray asterisk.
+ */
+const INLINE =
+  /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*|\*([^*\n]+)\*|`([^`]+)`/g;
 
 /** Turns a block's text into nodes. Anything unmatched stays plain text. */
 function inline(text: string): ReactNode[] {
@@ -13,7 +18,7 @@ function inline(text: string): ReactNode[] {
   let cursor = 0;
 
   for (const match of text.matchAll(INLINE)) {
-    const [full, label, href, bold, code] = match;
+    const [full, label, href, bold, emphasis, code] = match;
     const at = match.index;
     if (at > cursor) nodes.push(text.slice(cursor, at));
 
@@ -25,6 +30,8 @@ function inline(text: string): ReactNode[] {
       );
     } else if (bold) {
       nodes.push(<strong key={at}>{bold}</strong>);
+    } else if (emphasis) {
+      nodes.push(<em key={at}>{emphasis}</em>);
     } else {
       nodes.push(
         <code key={at} className={styles.code}>
@@ -76,13 +83,12 @@ function Block({ block, lead }: { block: PostBlock; lead: boolean }) {
     case "image":
       return (
         <figure className={styles.figure}>
-          <Image
+          <ProseImage
             className={styles.image}
             src={block.src}
             alt={block.alt}
-            width={block.width ?? 1600}
-            height={block.height ?? 900}
-            sizes="(max-width: 880px) 100vw, 800px"
+            width={block.width}
+            height={block.height}
           />
           {block.caption ? (
             <figcaption className={styles.caption}>{block.caption}</figcaption>

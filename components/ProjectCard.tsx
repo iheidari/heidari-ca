@@ -3,21 +3,38 @@ import SmartLink from "@/components/SmartLink";
 import type { Project } from "@/content/projects";
 import styles from "./ProjectCard.module.css";
 
+/**
+ * Which optional fields of a `Project` become footer links, in display order.
+ * One row per link, so adding a destination is a row rather than a branch, and
+ * `satisfies` makes a mistyped field name a typecheck error.
+ */
+const LINKS = [
+  { field: "live", label: "Live site", Icon: ArrowUpRightIcon, side: "end" },
+  {
+    field: "appStore",
+    label: "App Store",
+    Icon: ArrowUpRightIcon,
+    side: "end",
+  },
+  {
+    field: "googlePlay",
+    label: "Google Play",
+    Icon: ArrowUpRightIcon,
+    side: "end",
+  },
+  { field: "repo", label: "Source", Icon: GithubIcon, side: "start" },
+] as const satisfies readonly {
+  field: keyof Project;
+  label: string;
+  Icon: typeof ArrowUpRightIcon;
+  side: "start" | "end";
+}[];
+
 export default function ProjectCard({ project }: { project: Project }) {
-  const links = [
-    project.live
-      ? { href: project.live, label: "Live site", trailing: true }
-      : null,
-    project.appStore
-      ? { href: project.appStore, label: "App Store", trailing: true }
-      : null,
-    project.googlePlay
-      ? { href: project.googlePlay, label: "Google Play", trailing: true }
-      : null,
-    project.repo
-      ? { href: project.repo, label: "Source", trailing: false }
-      : null,
-  ].filter((link) => link !== null);
+  const links = LINKS.flatMap(({ field, label, Icon, side }) => {
+    const href = project[field];
+    return typeof href === "string" ? [{ href, label, Icon, side }] : [];
+  });
 
   return (
     <article className={styles.card}>
@@ -40,11 +57,11 @@ export default function ProjectCard({ project }: { project: Project }) {
 
       {links.length > 0 ? (
         <footer className={styles.links}>
-          {links.map(({ href, label, trailing }) => (
+          {links.map(({ href, label, Icon, side }) => (
             <SmartLink key={href} className={styles.link} href={href}>
-              {trailing ? null : <GithubIcon width={16} height={16} />}
+              {side === "start" ? <Icon width={16} height={16} /> : null}
               {label}
-              {trailing ? <ArrowUpRightIcon width={16} height={16} /> : null}
+              {side === "end" ? <Icon width={16} height={16} /> : null}
             </SmartLink>
           ))}
         </footer>

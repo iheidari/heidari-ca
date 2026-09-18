@@ -17,12 +17,9 @@
 }
 
 .legend {
+  composes: eyebrow from "@/components/recipes.module.css";
   padding: 0 var(--space-2);
   color: var(--color-muted-foreground);
-  font-size: var(--text-2xs);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 /* Kept in the layout and focusable; the label is the visible control. */
@@ -80,8 +77,8 @@
   display: none;
 }
 
-.reader:has(.input[value="full"]:checked) .panel[data-mode="full"],
-.reader:has(.input[value="short"]:checked) .panel[data-mode="short"],
-.reader:has(.input[value="tldr"]:checked) .panel[data-mode="tldr"] {
+.reader:has(.input[value="full"]:checked) .full,
+.reader:has(.input[value="short"]:checked) .short,
+.reader:has(.input[value="tldr"]:checked) .tldr {
   display: block;
 }

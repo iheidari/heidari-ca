@@ -23,12 +23,11 @@
 }
 
 .inner {
+  composes: container from "@/components/recipes.module.css";
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: var(--header-padding-y) var(--space-4);
+  padding-block: var(--header-padding-y);
 }
 
 .brand {

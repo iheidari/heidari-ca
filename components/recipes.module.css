@@ -95,3 +95,33 @@
   padding: 0;
   list-style: none;
 }
+
+/*
+ * Page shell. Callers add their own `padding-block`, and the prose routes
+ * override `max-width` with `--content-width-prose`. The inline padding is a
+ * longhand on purpose: a `padding` shorthand here would reset a caller's
+ * `padding-block` if the bundler ever ordered this sheet last.
+ */
+.container {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}
+
+/* Small uppercase label above a heading: callout titles, legends, the 404 code. */
+.eyebrow {
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Full-width figure image: post covers and in-body figures. */
+.framedImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-muted);
+}

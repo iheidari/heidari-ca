@@ -1,7 +1,18 @@
 import { Fragment } from "react";
 import PostBody from "@/components/PostBody";
-import { editions, type LocalPost } from "@/content/posts";
+import type { EditionMode, LocalPost } from "@/content/posts";
 import styles from "./PostReader.module.css";
+
+/**
+ * One class per edition: the stylesheet needs a selector per mode to reveal the
+ * checked panel. Typed as a total record so a mode added without its rule fails
+ * typecheck instead of rendering a blank article.
+ */
+const PANEL: Record<EditionMode, string> = {
+  full: styles.full,
+  short: styles.short,
+  tldr: styles.tldr,
+};
 
 /**
  * A post body with a full / short / tl;dr switch.
@@ -13,7 +24,7 @@ import styles from "./PostReader.module.css";
  * renders the body alone, with no switch.
  */
 export default function PostReader({ post }: { post: LocalPost }) {
-  const available = editions(post);
+  const available = post.editions;
   if (available.length === 1) return <PostBody blocks={post.body} />;
 
   const group = `edition-${post.slug}`;
@@ -23,7 +34,7 @@ export default function PostReader({ post }: { post: LocalPost }) {
       <fieldset className={styles.switch}>
         <legend className={styles.legend}>Read as</legend>
 
-        {available.map(({ mode, label, readingTime }) => (
+        {available.map(({ mode, label, readingMinutes }) => (
           // Direct children of the switch: a `display: contents` wrapper here
           // breaks sibling style invalidation when the checked radio changes.
           <Fragment key={mode}>
@@ -37,16 +48,14 @@ export default function PostReader({ post }: { post: LocalPost }) {
             />
             <label className={styles.label} htmlFor={`${group}-${mode}`}>
               {label}
-              <span className={styles.time}>
-                {readingTime.replace(" read", "")}
-              </span>
+              <span className={styles.time}>{readingMinutes} min</span>
             </label>
           </Fragment>
         ))}
       </fieldset>
 
       {available.map(({ mode, blocks }) => (
-        <div key={mode} className={styles.panel} data-mode={mode}>
+        <div key={mode} className={`${styles.panel} ${PANEL[mode]}`}>
           <PostBody blocks={blocks} />
         </div>
       ))}

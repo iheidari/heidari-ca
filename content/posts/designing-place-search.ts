@@ -1,4 +1,17 @@
+import type { PostBlock } from "./blocks";
 import type { LocalSource } from "./index";
+
+/**
+ * The sourcing note closes every edition. Shared rather than retyped, so the
+ * link and the wording can't drift between the full and short versions.
+ */
+const numbersNote: PostBlock = {
+  type: "callout",
+  title: "On the numbers",
+  text: "Numbers in this piece were measured against the live GeoNames US and Canada dumps and a production-shaped campground database — not estimated. The dataset is [GeoNames](https://www.geonames.org/), CC BY 4.0.",
+  href: "https://milemark.camp",
+  linkLabel: "See Milemark",
+};
 
 export const placeSearch: LocalSource = {
   kind: "local",
@@ -324,13 +337,7 @@ export const placeSearch: LocalSource = {
       type: "paragraph",
       text: "The feature still isn't built. But when it is, it won't be missing Banff.",
     },
-    {
-      type: "callout",
-      title: "On the numbers",
-      text: "Numbers in this piece were measured against the live GeoNames US and Canada dumps and a production-shaped campground database — not estimated. The dataset is [GeoNames](https://www.geonames.org/), CC BY 4.0.",
-      href: "/projects/milemark",
-      linkLabel: "Read the Milemark case study",
-    },
+    numbersNote,
   ],
   short: [
     {
@@ -459,10 +466,7 @@ export const placeSearch: LocalSource = {
       type: "paragraph",
       text: "The feature still isn't built. But when it is, it won't be missing Banff.",
     },
-    {
-      type: "paragraph",
-      text: "Numbers in this piece were measured against the live GeoNames US and Canada dumps and a production-shaped campground database — not estimated. The dataset is GeoNames, CC BY 4.0.",
-    },
+    numbersNote,
   ],
   tldr: [
     {

@@ -14,13 +14,13 @@ const links = [
   { label: "LinkedIn", href: site.socials.linkedin, Icon: LinkedinIcon },
   { label: "X (Twitter)", href: site.socials.twitter, Icon: XIcon },
   { label: "YouTube", href: site.socials.youtube, Icon: YoutubeIcon },
-  { label: "Email", href: `mailto:${site.email}`, Icon: MailIcon },
+  { label: "Email", href: site.mailto, Icon: MailIcon },
 ];
 
 export default function SocialLinks({ size = "md" }: { size?: "sm" | "md" }) {
   return (
     <ul
-      className={`${styles.list} ${size === "sm" ? styles.sm : ""}`}
+      className={size === "sm" ? `${styles.list} ${styles.sm}` : styles.list}
       role="list"
     >
       {links.map(({ label, href, Icon }) => (

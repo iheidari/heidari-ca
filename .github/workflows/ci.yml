@@ -5,6 +5,14 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+# A newer push to the same branch supersedes the run in flight.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest

@@ -4,6 +4,10 @@ export const site = {
   role: "Full-stack developer",
   location: "Vancouver, Canada",
   email: "iman@heidari.ca",
+  /** Derived once here rather than rebuilt at each link. */
+  get mailto() {
+    return `mailto:${this.email}`;
+  },
   url: "https://heidari.ca",
   tagline: "I build fast, reliable web products — end to end.",
   intro:

@@ -1,9 +1,9 @@
-export type { PostBlock } from "./blocks";
-
 import type { PostBlock } from "./blocks";
-import { readingTime } from "./blocks";
+import { readingMinutes } from "./blocks";
 import { placeSearch } from "./designing-place-search";
 import { tieredLlmRouting } from "./tiered-llm-routing";
+
+export type { PostBlock } from "./blocks";
 
 type PostBase = {
   slug: string;
@@ -32,16 +32,57 @@ export type LocalSource = PostBase & {
 type ExternalPost = PostBase & {
   kind: "external";
   href: string;
-  readingTime: string;
+  readingMinutes: number;
 };
+
+/** One reading edition of a post. `mode` doubles as its stylesheet class. */
+export type Edition = {
+  mode: "full" | "short" | "tldr";
+  label: string;
+  blocks: PostBlock[];
+  readingMinutes: number;
+};
+
+export type EditionMode = Edition["mode"];
 
 /**
  * A post either lives here (`local`, with a body) or somewhere else
  * (`external`, with a link). There is no third state, so no route ever has to
  * render an apology for a missing body.
+ *
+ * `editions` is built once here, longest first, and is never empty — `[0]` is
+ * always the full article, which is where the card's reading time comes from.
  */
-export type LocalPost = LocalSource & { readingTime: string };
+export type LocalPost = LocalSource & {
+  editions: Edition[];
+  readingMinutes: number;
+};
 export type Post = LocalPost | ExternalPost;
+
+/**
+ * The lead is a property of the post, not of any one edition, so it is counted
+ * as part of every edition rather than left for each caller to remember.
+ */
+function buildEditions(source: LocalSource): Edition[] {
+  const all: { mode: EditionMode; label: string; blocks?: PostBlock[] }[] = [
+    { mode: "full", label: "Full", blocks: source.body },
+    { mode: "short", label: "Short", blocks: source.short },
+    { mode: "tldr", label: "tl;dr", blocks: source.tldr },
+  ];
+
+  return all.flatMap(({ mode, label, blocks }) =>
+    blocks
+      ? [
+          {
+            mode,
+            label,
+            blocks,
+            readingMinutes: readingMinutes(source.lead, blocks),
+          },
+        ]
+      : [],
+  );
+}
 
 const entries: (LocalSource | ExternalPost)[] = [placeSearch, tieredLlmRouting];
 
@@ -50,50 +91,23 @@ const entries: (LocalSource | ExternalPost)[] = [placeSearch, tieredLlmRouting];
  * Local posts get their reading time measured here rather than hand-written,
  * so an edit to a body can't leave a stale number behind.
  */
-export const posts: readonly Post[] = [...entries]
+export const posts: readonly Post[] = entries
+  .slice()
   .sort((a, b) => b.date.localeCompare(a.date))
-  .map((post) =>
-    post.kind === "local"
-      ? { ...post, readingTime: readingTime(post.lead, post.body) }
-      : post,
-  );
+  .map((post) => {
+    if (post.kind !== "local") return post;
 
-const local = posts.filter((post): post is LocalPost => post.kind === "local");
-const bySlug = new Map(local.map((post) => [post.slug, post]));
+    const editions = buildEditions(post);
+    return { ...post, editions, readingMinutes: editions[0].readingMinutes };
+  });
 
 /** Posts with a body here, i.e. the ones `/blog/[slug]` can render. */
-export function localPosts(): readonly LocalPost[] {
-  return local;
-}
+export const localPosts: readonly LocalPost[] = posts.filter(
+  (post): post is LocalPost => post.kind === "local",
+);
+
+const bySlug = new Map(localPosts.map((post) => [post.slug, post]));
 
 export function findLocalPost(slug: string): LocalPost | undefined {
   return bySlug.get(slug);
-}
-
-/** The reading editions of a post, longest first. Only `full` is guaranteed. */
-const EDITIONS = [
-  { mode: "full", label: "Full", of: (post: LocalPost) => post.body },
-  { mode: "short", label: "Short", of: (post: LocalPost) => post.short },
-  { mode: "tldr", label: "tl;dr", of: (post: LocalPost) => post.tldr },
-] as const;
-
-export type Edition = {
-  mode: (typeof EDITIONS)[number]["mode"];
-  label: string;
-  blocks: PostBlock[];
-  readingTime: string;
-};
-
-/**
- * The editions a post actually ships, longest first. A post with no `short` or
- * `tldr` yields a single entry, which is what tells `PostReader` to skip the
- * switch entirely.
- */
-export function editions(post: LocalPost): Edition[] {
-  return EDITIONS.flatMap(({ mode, label, of }) => {
-    const blocks = of(post);
-    return blocks
-      ? [{ mode, label, blocks, readingTime: readingTime(post.lead, blocks) }]
-      : [];
-  });
 }

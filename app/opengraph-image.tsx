@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/content/site";
+import { palette } from "@/lib/palette";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -16,11 +17,17 @@ export default function OpengraphImage() {
         flexDirection: "column",
         justifyContent: "space-between",
         padding: 80,
-        background: "#09090b",
-        color: "#f4f4f5",
+        background: palette.dark.background,
+        color: palette.dark.foreground,
       }}
     >
-      <div style={{ display: "flex", fontSize: 30, color: "#a1a1ad" }}>
+      <div
+        style={{
+          display: "flex",
+          fontSize: 30,
+          color: palette.dark.mutedForeground,
+        }}
+      >
         {site.url.replace("https://", "")}
       </div>
       <div
@@ -33,7 +40,9 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", fontSize: 68, lineHeight: 1.1 }}>
           {site.tagline}
         </div>
-        <div style={{ display: "flex", fontSize: 34, color: "#7aa7ff" }}>
+        <div
+          style={{ display: "flex", fontSize: 34, color: palette.dark.accent }}
+        >
           {site.name} · {site.role}
         </div>
       </div>

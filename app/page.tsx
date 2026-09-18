@@ -14,7 +14,6 @@ import styles from "./page.module.css";
 export default function Home() {
   const latestPosts = posts.slice(0, 3);
   const { work, writing, contact } = site.sections;
-  const mailto = `mailto:${site.email}`;
 
   return (
     <div className={styles.main}>
@@ -38,7 +37,7 @@ export default function Home() {
               See my work
               <ArrowRightIcon width={18} height={18} />
             </Link>
-            <SmartLink className={styles.secondaryAction} href={mailto}>
+            <SmartLink className={styles.secondaryAction} href={site.mailto}>
               <MailIcon width={18} height={18} />
               Get in touch
             </SmartLink>
@@ -121,7 +120,7 @@ export default function Home() {
         </h2>
         <p className={styles.contactLead}>{contact.lead}</p>
         <div className={styles.actions}>
-          <SmartLink className={styles.primaryAction} href={mailto}>
+          <SmartLink className={styles.primaryAction} href={site.mailto}>
             <MailIcon width={18} height={18} />
             {site.email}
           </SmartLink>

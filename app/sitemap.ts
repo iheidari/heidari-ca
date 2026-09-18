@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: absoluteUrl("/"), priority: 1 },
     { url: absoluteUrl("/blog"), priority: 0.8 },
-    ...localPosts().map((post) => ({
+    ...localPosts.map((post) => ({
       url: absoluteUrl(`/blog/${post.slug}`),
       lastModified: postDate(post.date),
       priority: 0.6,

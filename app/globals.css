@@ -1,6 +1,7 @@
 :root {
   color-scheme: light;
 
+  /* Mirrored in lib/palette.ts for the OG image and theme-color. */
   --color-background: #fafafa;
   --color-foreground: #09090b;
   --color-card: #ffffff;
@@ -52,6 +53,9 @@
 
   /* Headings share the body face; override here if they diverge again. */
   --font-display: var(--font-body);
+
+  /* Full stack including fallbacks, so the chain can't drift between callers. */
+  --font-code: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
 
   --content-width: 1120px;
   --content-width-prose: 800px;
@@ -120,10 +124,13 @@ a {
   text-decoration: none;
 }
 
+/*
+ * No border-radius here: the outline already follows each element's own
+ * radius, and setting one flattens the pill controls in recipes.module.css.
+ */
 :focus-visible {
   outline: 2px solid var(--color-ring);
   outline-offset: 3px;
-  border-radius: var(--radius-sm);
 }
 
 ::selection {

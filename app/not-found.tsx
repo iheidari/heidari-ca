@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import styles from "./not-found.module.css";
+
+// The root layout's `canonical: "./"` would otherwise resolve against Next's
+// internal `_not-found` pathname and publish a canonical for a missing page.
+export const metadata: Metadata = { alternates: { canonical: null } };
 
 export default function NotFound() {
   return (

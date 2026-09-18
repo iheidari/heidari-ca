@@ -17,7 +17,7 @@ export default function BlogIndex() {
       </header>
 
       {posts.length > 0 ? (
-        <PostList posts={posts} />
+        <PostList posts={posts} headingLevel="h2" />
       ) : (
         <p className={styles.empty}>No posts yet. First one is on its way.</p>
       )}

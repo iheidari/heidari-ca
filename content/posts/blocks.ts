@@ -35,15 +35,19 @@ export type PostBlock =
       linkLabel?: string;
     };
 
-/** Every word a block contributes, for counting. */
+/**
+ * Every word a block contributes, for counting. Code is skipped: nobody reads a
+ * terminal transcript at prose speed, and counting it inflates short editions
+ * that are mostly output.
+ */
 function words(block: PostBlock): string {
   switch (block.type) {
     case "list":
       return block.items.join(" ");
     case "code":
-      return block.lines.join(" ");
+      return "";
     case "image":
-      return block.caption ?? "";
+      return [block.alt, block.caption].filter(Boolean).join(" ");
     default:
       return block.text;
   }
@@ -51,12 +55,12 @@ function words(block: PostBlock): string {
 
 const WORDS_PER_MINUTE = 200;
 
-/** Rough read time for one edition — "4 min read". */
-export function readingTime(lead: string, blocks: PostBlock[]): string {
+/** Rough read time for one edition, in minutes. Formatting is the caller's. */
+export function readingMinutes(lead: string, blocks: PostBlock[]): number {
   const count = [lead, ...blocks.map(words)]
     .join(" ")
     .split(/\s+/)
     .filter(Boolean).length;
 
-  return `${Math.max(1, Math.round(count / WORDS_PER_MINUTE))} min read`;
+  return Math.max(1, Math.round(count / WORDS_PER_MINUTE));
 }

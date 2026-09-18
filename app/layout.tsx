@@ -3,6 +3,7 @@ import { JetBrains_Mono, Poppins } from "next/font/google";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { site } from "@/content/site";
+import { palette } from "@/lib/palette";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
@@ -16,10 +17,15 @@ const poppins = Poppins({
   variable: "--font-body",
 });
 
-// Code blocks and inline `code` in post bodies are the only monospace on the site.
+/*
+ * Code blocks and inline `code` in post bodies are the only monospace on the
+ * site, so there is nothing to preload on `/`, `/blog` or the 404 — the face
+ * loads lazily when a stylesheet actually asks for it.
+ */
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   variable: "--font-mono",
 });
 
@@ -44,8 +50,11 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: palette.light.background,
+    },
+    { media: "(prefers-color-scheme: dark)", color: palette.dark.background },
   ],
 };
 
