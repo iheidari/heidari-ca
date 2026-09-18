@@ -41,6 +41,18 @@
   --control-height: 44px;
   --control-height-lg: 48px;
 
+  /* Header height is derived, so the sticky offset can't drift from the header. */
+  --header-padding-y: var(--space-2);
+  --header-height: calc(
+    var(--header-padding-y) *
+    2 +
+    var(--control-height) +
+    1px
+  );
+
+  /* Headings share the body face; override here if they diverge again. */
+  --font-display: var(--font-body);
+
   --content-width: 1120px;
   --content-width-prose: 800px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -70,8 +82,7 @@
 
 html {
   scroll-behavior: smooth;
-  /* Clears the sticky header: its padding plus one control. */
-  scroll-padding-top: calc(var(--space-3) * 2 + var(--control-height) + 4px);
+  scroll-padding-top: var(--header-height);
 }
 
 body {

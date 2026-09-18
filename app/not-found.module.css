@@ -27,5 +27,5 @@
 }
 
 .action {
-  composes: buttonPrimary from "@/components/recipes.module.css";
+  composes: button buttonPrimary from "@/components/recipes.module.css";
 }

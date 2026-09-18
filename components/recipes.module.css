@@ -29,6 +29,13 @@
   padding: 0;
 }
 
+/*
+ * Keep these recipes at most one `composes` hop deep: a three-hop chain
+ * (consumer -> buttonPrimary -> button -> control) silently drops the deepest
+ * class from the emitted list. Variants below add colour only — consumers pull
+ * in the shape themselves, e.g. `composes: button buttonPrimary from "..."`.
+ */
+
 /* A control that reads as a button. */
 .button {
   composes: control;
@@ -40,7 +47,6 @@
 }
 
 .buttonPrimary {
-  composes: button;
   border: 1px solid var(--color-accent);
   background: var(--color-accent);
   color: var(--color-on-accent);

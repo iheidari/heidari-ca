@@ -12,16 +12,17 @@ export const site = {
   socials: {
     github: "https://github.com/iheidari/",
     linkedin: "https://www.linkedin.com/in/iheidari/",
-    twitter: "https://twitter.com/ximaneshon/",
+    twitter: "https://twitter.com/im0xn/",
     youtube: "https://www.youtube.com/channel/UC0Yh_8K94hOmtErgCvsR3Og",
   },
   stack: [
     "TypeScript",
     "React",
+    "React Native",
     "Next.js",
+    "Expo",
     "Node.js",
     "PostgreSQL",
-    "AWS",
     "Docker",
   ],
   /** Section copy lives here too, so a heading is never defined in two files. */
