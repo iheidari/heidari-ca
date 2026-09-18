@@ -25,7 +25,6 @@ export const metadata: Metadata = {
     template: `%s — ${site.name}`,
   },
   description: site.intro,
-  icons: { icon: "/favicon.ico" },
   /*
    * `./` resolves against each route's own pathname, so every page gets its own
    * canonical and og:url from this one declaration. Leaving og:title/description
