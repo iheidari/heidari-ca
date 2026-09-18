@@ -54,6 +54,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       data-theme="light"
+      // globals.css sets `scroll-behavior: smooth` for the home page's anchor
+      // links; this opts back into Next suppressing it during route changes,
+      // so a navigation still lands at the top instantly.
+      data-scroll-behavior="smooth"
       className={`${poppins.variable} ${jetBrainsMono.variable}`}
       suppressHydrationWarning
     >
