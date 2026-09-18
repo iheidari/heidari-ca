@@ -1,21 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Space_Grotesk } from "next/font/google";
+import { JetBrains_Mono, Poppins } from "next/font/google";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { site } from "@/content/site";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
-const body = Archivo({
+// Body and display are both Poppins, so it loads once; app/globals.css points
+// --font-display at --font-body, leaving the seam in place if they diverge again.
+const poppins = Poppins({
   subsets: ["latin"],
+  // Poppins is not a variable font, so the weights the site uses are explicit.
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   variable: "--font-body",
 });
 
-const display = Space_Grotesk({
+// Code blocks and inline `code` in post bodies are the only monospace on the site.
+const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-display",
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -49,7 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       data-theme="light"
-      className={`${body.variable} ${display.variable}`}
+      className={`${poppins.variable} ${jetBrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>

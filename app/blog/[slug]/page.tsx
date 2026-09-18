@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import styles from "@/app/blog/blog.module.css";
 import PostMeta from "@/components/PostMeta";
+import PostReader from "@/components/PostReader";
 import { findLocalPost, localPosts } from "@/content/posts";
 
 export function generateStaticParams() {
@@ -39,7 +41,21 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
           readingTime={post.readingTime}
           month="long"
         />
-        <p className={styles.body}>{post.body}</p>
+        <p className={styles.postLead}>{post.lead}</p>
+
+        {post.cover ? (
+          <Image
+            className={styles.cover}
+            src={post.cover}
+            alt=""
+            width={1600}
+            height={900}
+            sizes="(max-width: 880px) 100vw, 800px"
+            priority
+          />
+        ) : null}
+
+        <PostReader post={post} />
       </article>
     </div>
   );

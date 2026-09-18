@@ -8,6 +8,12 @@ export default function ProjectCard({ project }: { project: Project }) {
     project.live
       ? { href: project.live, label: "Live site", trailing: true }
       : null,
+    project.appStore
+      ? { href: project.appStore, label: "App Store", trailing: true }
+      : null,
+    project.googlePlay
+      ? { href: project.googlePlay, label: "Google Play", trailing: true }
+      : null,
     project.repo
       ? { href: project.repo, label: "Source", trailing: false }
       : null,
@@ -17,7 +23,9 @@ export default function ProjectCard({ project }: { project: Project }) {
     <article className={styles.card}>
       <header className={styles.head}>
         <h3 className={styles.title}>{project.title}</h3>
-        <span className={styles.year}>{project.year}</span>
+        {project.year ? (
+          <span className={styles.year}>{project.year}</span>
+        ) : null}
       </header>
 
       <p className={styles.summary}>{project.summary}</p>

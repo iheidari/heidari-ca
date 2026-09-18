@@ -45,8 +45,17 @@
   justify-items: start;
 }
 
-.body {
-  margin-top: var(--space-5);
+.postLead {
+  color: var(--color-muted-foreground);
   font-size: var(--text-lg);
-  white-space: pre-line;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-muted);
 }

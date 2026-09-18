@@ -1,0 +1,87 @@
+.reader {
+  display: grid;
+  gap: var(--space-5);
+  width: 100%;
+}
+
+.switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+.legend {
+  padding: 0 var(--space-2);
+  color: var(--color-muted-foreground);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Kept in the layout and focusable; the label is the visible control. */
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.label {
+  composes: control from "@/components/recipes.module.css";
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  border: 1px solid transparent;
+  color: var(--color-muted-foreground);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.label:hover {
+  background: var(--color-muted);
+  color: var(--color-foreground);
+}
+
+.input:checked + .label {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.input:focus-visible + .label {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 3px;
+}
+
+.time {
+  color: var(--color-muted-foreground);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Every edition ships in the HTML; the checked radio picks the one on screen.
+ * The `:has` guard means a browser without it stacks them instead of hiding
+ * all three.
+ */
+.reader:has(.input:checked) .panel {
+  display: none;
+}
+
+.reader:has(.input[value="full"]:checked) .panel[data-mode="full"],
+.reader:has(.input[value="short"]:checked) .panel[data-mode="short"],
+.reader:has(.input[value="tldr"]:checked) .panel[data-mode="tldr"] {
+  display: block;
+}
