@@ -1,0 +1,127 @@
+/*
+ * Shared recipes. Import with `composes: <name> from "@/components/recipes.module.css"`
+ * so hit-target size, surfaces, and hover behaviour are defined once.
+ */
+
+/* Interactive hit target. Layout and sizing only — callers own typography. */
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  border-radius: var(--radius-pill);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.control:active {
+  transform: scale(0.98);
+}
+
+/* Square control, for icon-only buttons and links. */
+.iconControl {
+  composes: control;
+  width: var(--control-height);
+  padding: 0;
+}
+
+/*
+ * Keep these recipes at most one `composes` hop deep: a three-hop chain
+ * (consumer -> buttonPrimary -> button -> control) silently drops the deepest
+ * class from the emitted list. Variants below add colour only — consumers pull
+ * in the shape themselves, e.g. `composes: button buttonPrimary from "..."`.
+ */
+
+/* A control that reads as a button. */
+.button {
+  composes: control;
+  min-height: var(--control-height-lg);
+  padding: 0 var(--space-4);
+  font-size: var(--text-md);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.buttonPrimary {
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.buttonPrimary:hover {
+  background: color-mix(
+    in srgb,
+    var(--color-accent) 86%,
+    var(--color-foreground)
+  );
+}
+
+/* Neutral outlined control: secondary buttons, social links, theme toggle. */
+.buttonNeutral {
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+}
+
+.buttonNeutral:hover {
+  background: var(--color-muted);
+  border-color: var(--color-muted-foreground);
+}
+
+/* Raised panel: hero card, contact block, project card. */
+.surface {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+}
+
+/* Small inline label: tech-stack entries, project tags. */
+.chip {
+  padding: 2px var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-muted);
+  color: var(--color-muted-foreground);
+  font-size: var(--text-2xs);
+}
+
+/* Markers are removed per-list rather than by a global reset, so the list role
+ * survives in Safari/VoiceOver. */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * Page shell. Callers add their own `padding-block`, and the prose routes
+ * override `max-width` with `--content-width-prose`. The inline padding is a
+ * longhand on purpose: a `padding` shorthand here would reset a caller's
+ * `padding-block` if the bundler ever ordered this sheet last.
+ */
+.container {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding-inline: var(--space-4);
+}
+
+/* Small uppercase label above a heading: callout titles, legends, the 404 code. */
+.eyebrow {
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Full-width figure image: post covers and in-body figures. */
+.framedImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-muted);
+}

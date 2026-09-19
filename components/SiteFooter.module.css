@@ -1,0 +1,19 @@
+.footer {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-8);
+}
+
+.inner {
+  composes: container from "@/components/recipes.module.css";
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-5);
+}
+
+.copy {
+  color: var(--color-muted-foreground);
+  font-size: var(--text-sm);
+}

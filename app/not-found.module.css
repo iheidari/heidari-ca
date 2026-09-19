@@ -1,0 +1,29 @@
+.main {
+  composes: container from "@/components/recipes.module.css";
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-8);
+  text-align: center;
+}
+
+.code {
+  composes: eyebrow from "@/components/recipes.module.css";
+  color: var(--color-muted-foreground);
+  font-family: var(--font-display), sans-serif;
+  font-size: var(--text-sm);
+}
+
+.title {
+  font-size: var(--text-display);
+  font-weight: 700;
+}
+
+.lead {
+  max-width: 48ch;
+  color: var(--color-muted-foreground);
+}
+
+.action {
+  composes: button buttonPrimary from "@/components/recipes.module.css";
+}

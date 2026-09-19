@@ -1,0 +1,56 @@
+.main {
+  composes: container from "@/components/recipes.module.css";
+  max-width: var(--content-width-prose);
+  padding-block: var(--space-7);
+}
+
+.head {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+}
+
+.lead {
+  max-width: 62ch;
+  color: var(--color-muted-foreground);
+}
+
+.empty {
+  padding: var(--space-6);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-muted-foreground);
+  text-align: center;
+}
+
+.back {
+  composes: control from "@/components/recipes.module.css";
+  margin-bottom: var(--space-4);
+  color: var(--color-muted-foreground);
+  font-size: var(--text-sm);
+}
+
+.back:hover {
+  color: var(--color-foreground);
+}
+
+.article {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.postLead {
+  color: var(--color-muted-foreground);
+  font-size: var(--text-lg);
+}
+
+.cover {
+  composes: framedImage from "@/components/recipes.module.css";
+  margin-top: var(--space-2);
+}
