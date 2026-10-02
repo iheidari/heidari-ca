@@ -2,6 +2,7 @@ import type { PostBlock } from "./blocks";
 import { readingMinutes } from "./blocks";
 import { placeSearch } from "./designing-place-search";
 import { tieredLlmRouting } from "./tiered-llm-routing";
+import { tryingJev } from "./trying-jev";
 
 export type { PostBlock } from "./blocks";
 
@@ -84,7 +85,11 @@ function buildEditions(source: LocalSource): Edition[] {
   );
 }
 
-const entries: (LocalSource | ExternalPost)[] = [placeSearch, tieredLlmRouting];
+const entries: (LocalSource | ExternalPost)[] = [
+  placeSearch,
+  tieredLlmRouting,
+  tryingJev,
+];
 
 /**
  * Newest first, sorted once: ordering is this module's job, not a caller's.
