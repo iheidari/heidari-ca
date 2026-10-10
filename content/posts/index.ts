@@ -1,6 +1,7 @@
 import type { PostBlock } from "./blocks";
 import { readingMinutes } from "./blocks";
 import { placeSearch } from "./designing-place-search";
+import { smallLlmComparison } from "./small-llm-comparison";
 import { tieredLlmRouting } from "./tiered-llm-routing";
 import { tryingJev } from "./trying-jev";
 
@@ -89,6 +90,7 @@ const entries: (LocalSource | ExternalPost)[] = [
   placeSearch,
   tieredLlmRouting,
   tryingJev,
+  smallLlmComparison,
 ];
 
 /**

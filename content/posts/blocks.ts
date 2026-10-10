@@ -4,7 +4,7 @@
  * for styling the site doesn't have.
  *
  * Inside any `text` or list item the whole inline vocabulary is
- * `[label](href)`, `**bold**`, and `` `code` ``.
+ * `[label](href)`, `**bold**`, `*emphasis*`, and `` `code` ``.
  */
 export type PostBlock =
   /** Body paragraph. The first paragraph of an edition renders one step larger. */

@@ -76,6 +76,8 @@
 .terminal {
   composes: surface from "@/components/recipes.module.css";
   overflow: hidden;
+  /* A wide code line scrolls inside the block instead of widening the column. */
+  contain: inline-size;
   margin: var(--space-4) 0;
   background: var(--color-muted);
 }
