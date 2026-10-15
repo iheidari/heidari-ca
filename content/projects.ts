@@ -40,14 +40,15 @@ export const projects: Project[] = [
       "https://play.google.com/store/apps/details?id=com.zeroxcode.truenorthprep",
   },
   {
-    slug: "exchange-widget",
-    title: "Exchange Widget",
+    slug: "fexi",
+    title: "Fexi",
     summary:
-      "A home-screen currency exchange widget with live rates and quick-glance conversions.",
-    tags: ["Widget", "iOS · Android"],
-    appStore: "https://apps.apple.com/us/app/exchangewidget/id6762816436",
+      "A currency exchange app with live rates, quick-glance conversions, and native home-screen widgets.",
+    tags: ["Web App", "Mobile", "Widget", "iOS · Android"],
+    live: "https://fexi.app",
+    appStore: "https://apps.apple.com/us/app/fexi/id6792419099",
     googlePlay:
-      "https://play.google.com/store/apps/details?id=com.zeroxcode.exchangewidget",
+      "https://play.google.com/store/apps/details?id=com.zeroxcode.fexi",
   },
   {
     slug: "better-bc-assessment",

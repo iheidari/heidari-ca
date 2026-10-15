@@ -9,9 +9,9 @@ export const site = {
     return `mailto:${this.email}`;
   },
   url: "https://heidari.ca",
-  tagline: "I build fast, reliable web products — end to end.",
+  tagline: "I build fast, reliable web and mobile products — end to end.",
   intro:
-    "Full-stack developer with a bias for shipping. I design the data model, write the API, build the interface, and stay until it runs well in production.",
+    "Full-stack developer with 16+ years of shipping. I design the data model, write the API, build the web and mobile interfaces, and stay until it runs well in production. I work AI-native every day, and build LLM-powered features into the products I ship.",
   available: true,
   socials: {
     github: "https://github.com/iheidari/",
