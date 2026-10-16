@@ -8,14 +8,23 @@ Personal site and portfolio for Iman Heidari — a fully static Astro site with 
 pnpm install
 pnpm dev          # http://localhost:4321
 pnpm build        # static output in dist/
-pnpm preview
+pnpm preview      # serves dist/ via wrangler dev, same routing as production
+pnpm run deploy   # build + wrangler deploy (bare `pnpm deploy` is a pnpm built-in)
 pnpm format       # Biome, writes
 pnpm lint         # Biome check
 pnpm typecheck    # astro check
 ```
 
 CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, and build on
-every pull request.
+every pull request, and on push to `main` also deploys to Cloudflare (needs the
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repo secrets).
+
+## Deploy
+
+Hosted on Cloudflare Workers as a static-assets-only Worker (`wrangler.jsonc`), no
+adapter, on the `heidari.ca` custom domain (`www` redirects to it via a
+Cloudflare Redirect Rule). `html_handling: "drop-trailing-slash"` mirrors Astro's
+`trailingSlash: "never"`; redirects live in `public/_redirects`.
 
 ## Editing content
 
