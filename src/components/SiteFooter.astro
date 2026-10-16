@@ -1,0 +1,13 @@
+---
+import SocialLinks from "@/components/SocialLinks.astro";
+import { site } from "@/content/site";
+import styles from "./SiteFooter.module.css";
+---
+
+<footer class={styles.footer}>
+  <div class={styles.inner}>
+    {/* No year: these pages are static, so a build-time year goes stale. */}
+    <p class={styles.copy}>© {site.name}. Built with Astro.</p>
+    <SocialLinks size="sm" />
+  </div>
+</footer>

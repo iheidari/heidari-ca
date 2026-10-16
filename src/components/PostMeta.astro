@@ -1,0 +1,19 @@
+---
+import { formatPostDate } from "@/lib/date";
+import styles from "./PostMeta.module.css";
+
+type Props = {
+  date: string;
+  readingMinutes: number;
+  /** Date format: `Jan 5, 2026` or `January 5, 2026`. */
+  dateStyle?: "short" | "long";
+};
+
+const { date, readingMinutes, dateStyle } = Astro.props;
+---
+
+<div class={styles.meta}>
+  <time datetime={date}>{formatPostDate(date, dateStyle)}</time>
+  <span aria-hidden="true">·</span>
+  <span>{readingMinutes} min read</span>
+</div>

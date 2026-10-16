@@ -1,0 +1,62 @@
+---
+import SmartLink from "@/components/SmartLink.astro";
+import styles from "./PostBody.module.css";
+
+/**
+ * `[label](href)` · `**bold**` · `*emphasis*` · `` `code` `` — the whole inline
+ * vocabulary. `**bold**` is listed before `*emphasis*` so a bold run is never
+ * mis-read as emphasis wrapping a stray asterisk.
+ */
+const INLINE =
+  /\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*|\*([^*\n]+)\*|`([^`]+)`/g;
+
+type Segment =
+  | { kind: "text"; text: string }
+  | { kind: "link"; text: string; href: string }
+  | { kind: "bold" | "emphasis" | "code"; text: string };
+
+/** Splits a block's text into segments. Anything unmatched stays plain text. */
+function tokenize(text: string): Segment[] {
+  const segments: Segment[] = [];
+  let cursor = 0;
+
+  for (const match of text.matchAll(INLINE)) {
+    const [full, label, href, bold, emphasis, code] = match;
+    const at = match.index;
+    if (at > cursor) segments.push({ kind: "text", text: text.slice(cursor, at) });
+
+    if (href) segments.push({ kind: "link", text: label, href });
+    else if (bold) segments.push({ kind: "bold", text: bold });
+    else if (emphasis) segments.push({ kind: "emphasis", text: emphasis });
+    else segments.push({ kind: "code", text: code });
+
+    cursor = at + full.length;
+  }
+
+  if (cursor < text.length) segments.push({ kind: "text", text: text.slice(cursor) });
+  return segments;
+}
+
+type Props = { text: string };
+
+const segments = tokenize(Astro.props.text);
+---
+
+{
+  // biome-ignore lint/suspicious/useIterableCallbackReturn: the switch is exhaustive over Segment
+  segments.map((segment) => {
+    switch (segment.kind) {
+      case "text":
+        return segment.text;
+      case "link":
+        // One line: whitespace inside the slot would render inside the link.
+        return <SmartLink class={styles.link} href={segment.href}>{segment.text}</SmartLink>;
+      case "bold":
+        return <strong>{segment.text}</strong>;
+      case "emphasis":
+        return <em>{segment.text}</em>;
+      case "code":
+        return <code class={styles.code}>{segment.text}</code>;
+    }
+  })
+}

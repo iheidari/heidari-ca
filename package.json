@@ -2,30 +2,29 @@
   "name": "heidari-ca",
   "private": true,
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=22.22.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "lint": "biome check . && eslint .",
-    "typecheck": "next typegen && tsc --noEmit"
-  },
-  "dependencies": {
-    "next": "16.3.5",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "lint": "biome check .",
+    "typecheck": "astro check",
+    "deploy": "astro build && wrangler deploy"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@biomejs/biome": "2.5.14",
+    "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^24",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.3.5",
-    "typescript": "^5"
+    "satori": "^0.60.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.151.0"
   },
-  "packageManager": "pnpm@10.0.0"
+  "packageManager": "pnpm@10.0.0",
+  "dependencies": {
+    "astro": "7.4.0"
+  }
 }

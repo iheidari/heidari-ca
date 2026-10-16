@@ -1,0 +1,37 @@
+---
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import { site } from "@/content/site";
+import styles from "./SiteHeader.module.css";
+
+const links = [
+  { href: "/#work", label: "Work" },
+  { href: "/blog", label: "Writing" },
+  { href: "/#contact", label: "Contact" },
+];
+---
+
+<header class={styles.header}>
+  <a class={styles.skip} href="#main">Skip to content</a>
+  <div class={styles.inner}>
+    <a href="/" class={styles.brand}>
+      <span class={styles.mark} aria-hidden="true">{site.initials}</span>
+      <span class={styles.brandName}>{site.name}</span>
+    </a>
+
+    <nav aria-label="Main">
+      <ul class={styles.navList} role="list">
+        {
+          links.map((link) => (
+            <li>
+              <a class={styles.navLink} href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <ThemeToggle />
+  </div>
+</header>

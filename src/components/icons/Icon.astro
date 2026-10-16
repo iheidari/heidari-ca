@@ -1,0 +1,24 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg">;
+
+// Merged into one object: Astro emits repeated attributes rather than letting
+// a later one win, so a caller's `width` must replace the default, not follow it.
+const attrs = {
+  viewBox: "0 0 24 24",
+  width: 20,
+  height: 20,
+  fill: "none",
+  stroke: "currentColor",
+  "stroke-width": 1.75,
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  ...Astro.props,
+} satisfies Props;
+
+// `aria-hidden` stays literal: icons are always decorative (the label lives on
+// the control around them), and Biome's svg-title rule can't see through spreads.
+---
+
+<svg aria-hidden="true" focusable="false" {...attrs}><slot /></svg>

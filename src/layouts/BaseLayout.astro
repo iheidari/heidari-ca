@@ -1,0 +1,90 @@
+---
+import { Font } from "astro:assets";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import { site } from "@/content/site";
+import { palette } from "@/lib/palette";
+import { themeInitScript } from "@/lib/theme";
+import { absoluteUrl, canonicalUrl } from "@/lib/url";
+import "@/styles/globals.css";
+
+type Props = {
+  /** Page title; the layout appends the site name. Omit for the default. */
+  title?: string;
+  description?: string;
+  /**
+   * Off for the 404, which is served at whatever path was missing and must not
+   * publish a canonical for it.
+   */
+  canonical?: boolean;
+};
+
+const { title, description = site.intro, canonical = true } = Astro.props;
+
+const fullTitle = title
+  ? `${title} — ${site.name}`
+  : `${site.name} — ${site.role}`;
+
+const url = canonicalUrl(Astro.url.pathname);
+const ogImage = absoluteUrl("/opengraph-image.png");
+---
+
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Static string, no user data; must run before first paint. */}
+    <script is:inline set:html={themeInitScript} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {
+      canonical ? (
+        <link rel="canonical" href={url} />
+      ) : (
+        <meta name="robots" content="noindex" />
+      )
+    }
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content={palette.light.background}
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content={palette.dark.background}
+    />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    {canonical ? <meta property="og:url" content={url} /> : null}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <Font cssVariable="--font-body" preload={[{ weight: 400 }]} />
+    {/*
+     * Code blocks and inline `code` in post bodies are the only monospace on
+     * the site, so nothing is preloaded — the face loads lazily when a
+     * stylesheet actually asks for it.
+     */}
+    <Font cssVariable="--font-mono" />
+  </head>
+  <body>
+    <SiteHeader />
+    {/* Declared here, next to the skip link that targets it, so no route can forget it. */}
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

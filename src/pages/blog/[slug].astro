@@ -1,0 +1,43 @@
+---
+import type { GetStaticPaths } from "astro";
+import PostMeta from "@/components/PostMeta.astro";
+import PostReader from "@/components/PostReader.astro";
+import ProseImage from "@/components/ProseImage.astro";
+import { type LocalPost, localPosts } from "@/content/posts";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import styles from "@/styles/blog.module.css";
+
+export const getStaticPaths = (() =>
+  localPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))) satisfies GetStaticPaths;
+
+type Props = { post: LocalPost };
+
+const { post } = Astro.props;
+---
+
+<BaseLayout title={post.title} description={post.excerpt}>
+  <div class={styles.main}>
+    <a class={styles.back} href="/blog">← All posts</a>
+
+    <article class={styles.article}>
+      <h1 class={styles.title}>{post.title}</h1>
+      <PostMeta
+        date={post.date}
+        readingMinutes={post.readingMinutes}
+        dateStyle="long"
+      />
+      <p class={styles.postLead}>{post.lead}</p>
+
+      {
+        post.cover ? (
+          <ProseImage class={styles.cover} src={post.cover} alt="" preload />
+        ) : null
+      }
+
+      <PostReader post={post} />
+    </article>
+  </div>
+</BaseLayout>
