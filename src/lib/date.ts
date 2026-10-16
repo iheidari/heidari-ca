@@ -3,7 +3,11 @@
  * date can't drift a day between the build machine and the reader.
  */
 export function postDate(date: string) {
-  return new Date(`${date}T00:00:00Z`);
+  const parsed = new Date(`${date}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    throw new Error(`Invalid post date "${date}"; expected YYYY-MM-DD`);
+  }
+  return parsed;
 }
 
 const formatters = {

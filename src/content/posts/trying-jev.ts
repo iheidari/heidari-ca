@@ -5,14 +5,14 @@ import firstResultsImage from "@/assets/images/blog/jev/first-results.png";
 import scoreWhatMattersImage from "@/assets/images/blog/jev/score-what-matters.png";
 import sentenceToQuestionsImage from "@/assets/images/blog/jev/sentence-to-questions.png";
 import type { LocalSource } from "./index";
+import { postMeta } from "./meta";
 
 export const tryingJev: LocalSource = {
   kind: "local",
-  slug: "trying-jev-for-natural-language-search",
+  ...postMeta.tryingJev,
   title: "What we learned trying Jev for natural-language search",
   excerpt:
     "We rebuilt Milemark’s natural-language search as ~90 yes/no and multiple-choice questions for Jev: 90% of checks passed at 409 ms and $0.34 per 1,000 searches, but our confidence scoring sent every search back to the LLM.",
-  date: "2026-10-01",
   cover: coverImage,
   lead: "Jev can’t write, so we asked it questions — and found that how you score its confidence matters as much as the model.",
   body: [

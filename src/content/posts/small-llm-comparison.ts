@@ -6,6 +6,7 @@ import scoreImage from "@/assets/images/blog/small-llm-comparison/score.png";
 import tokensImage from "@/assets/images/blog/small-llm-comparison/tokens.png";
 import type { PostBlock } from "./blocks";
 import type { LocalSource } from "./index";
+import { postMeta } from "./meta";
 
 /**
  * Figures shown in both the full and short editions. Shared rather than
@@ -43,12 +44,11 @@ const tokensFigure: PostBlock = {
 
 export const smallLlmComparison: LocalSource = {
   kind: "local",
-  slug: "nine-small-llms-for-natural-language-search",
+  ...postMeta.smallLlmComparison,
   title:
     "Nine small LLMs, one job: turning a camper’s sentence into map filters",
   excerpt:
     "We ran nine fast, inexpensive models over Milemark’s 29-sentence search test set: six scored 98% or better, and three of those answered in under two seconds for $0.25–$0.50 per 1,000 searches.",
-  date: "2026-10-09",
   cover: coverImage,
   lead: "Most small models read a search sentence correctly. What separates them is dates, wording, and how many tokens they spend getting there.",
   body: [
