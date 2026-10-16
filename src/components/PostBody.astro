@@ -1,0 +1,87 @@
+---
+import Inline from "@/components/Inline.astro";
+import ProseImage from "@/components/ProseImage.astro";
+import SmartLink from "@/components/SmartLink.astro";
+import type { PostBlock } from "@/content/posts";
+import styles from "./PostBody.module.css";
+
+/** Renders one edition of a post from its block array. */
+type Props = { blocks: readonly PostBlock[] };
+
+const { blocks } = Astro.props;
+
+// The opening paragraph renders one step larger, wherever it falls.
+const lead = blocks.findIndex((block) => block.type === "paragraph");
+---
+
+<div class={styles.body}>
+  {
+    // biome-ignore lint/suspicious/useIterableCallbackReturn: the switch is exhaustive over PostBlock
+    blocks.map((block, index) => {
+      switch (block.type) {
+        case "heading":
+          return <h2 class={styles.heading}>{block.text}</h2>;
+
+        case "paragraph":
+          return (
+            <p class={index === lead ? styles.leadParagraph : styles.paragraph}>
+              <Inline text={block.text} />
+            </p>
+          );
+
+        case "list":
+          return (
+            <ul class={styles.list}>
+              {block.items.map((item) => (
+                <li><Inline text={item} /></li>
+              ))}
+            </ul>
+          );
+
+        case "quote":
+          return (
+            <blockquote class={styles.quote}>
+              <p><Inline text={block.text} /></p>
+              {block.attribution ? (
+                <footer class={styles.attribution}>— {block.attribution}</footer>
+              ) : null}
+            </blockquote>
+          );
+
+        case "image":
+          return (
+            <figure class={styles.figure}>
+              <ProseImage src={block.src} alt={block.alt} />
+              {block.caption ? (
+                <figcaption class={styles.caption}>{block.caption}</figcaption>
+              ) : null}
+            </figure>
+          );
+
+        case "code":
+          return (
+            <div class={styles.terminal}>
+              {block.title ? (
+                <p class={styles.terminalTitle}>{block.title}</p>
+              ) : null}
+              {/* One entry per line, joined here so it copies as real text. */}
+              <pre class={styles.pre}><code>{block.lines.join("\n")}</code></pre>
+            </div>
+          );
+
+        case "callout":
+          return (
+            <aside class={styles.callout}>
+              {block.title ? (
+                <p class={styles.calloutTitle}>{block.title}</p>
+              ) : null}
+              <p><Inline text={block.text} /></p>
+              {block.href ? (
+                <SmartLink class={styles.calloutLink} href={block.href}>{block.linkLabel ?? "Read more"} →</SmartLink>
+              ) : null}
+            </aside>
+          );
+      }
+    })
+  }
+</div>

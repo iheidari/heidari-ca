@@ -1,0 +1,44 @@
+---
+import ArrowUpRightIcon from "@/components/icons/ArrowUpRightIcon.astro";
+import PostMeta from "@/components/PostMeta.astro";
+import SmartLink from "@/components/SmartLink.astro";
+import type { Post } from "@/content/posts";
+import styles from "./PostList.module.css";
+
+type Props = {
+  posts: readonly Post[];
+  /** Depends on what sits above the list: `h2` on /blog, `h3` under a section. */
+  headingLevel?: "h2" | "h3";
+};
+
+const { posts, headingLevel = "h3" } = Astro.props;
+const Heading = headingLevel;
+---
+
+<ul class={styles.list} role="list">
+  {
+    posts.map((post) => (
+      <li>
+        <SmartLink
+          class={styles.item}
+          href={post.kind === "external" ? post.href : `/blog/${post.slug}`}
+        >
+          <PostMeta date={post.date} readingMinutes={post.readingMinutes} />
+
+          <Heading class={styles.title}>
+            {post.title}
+            {post.kind === "external" ? (
+              <ArrowUpRightIcon
+                class={styles.external}
+                width={16}
+                height={16}
+              />
+            ) : null}
+          </Heading>
+
+          <p class={styles.excerpt}>{post.excerpt}</p>
+        </SmartLink>
+      </li>
+    ))
+  }
+</ul>

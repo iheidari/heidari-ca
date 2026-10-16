@@ -1,0 +1,15 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import styles from "@/styles/not-found.module.css";
+---
+
+<BaseLayout canonical={false}>
+  <div class={styles.main}>
+    <p class={styles.code}>404</p>
+    <h1 class={styles.title}>This page does not exist</h1>
+    <p class={styles.lead}>
+      The link may be out of date, or the page may have moved.
+    </p>
+    <a class={styles.action} href="/">Back to home</a>
+  </div>
+</BaseLayout>

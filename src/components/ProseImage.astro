@@ -1,0 +1,39 @@
+---
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import styles from "./ProseImage.module.css";
+
+/**
+ * Every image that renders inside the prose column: post covers and in-body
+ * figures. It owns what both call sites would otherwise restate — the `sizes`
+ * hint, the srcset widths, and the framed styling. Intrinsic size comes from
+ * the imported file, so a differently shaped image never stretches.
+ *
+ * `sizes` is full-bleed below the breakpoint and capped at the column width
+ * above it; the 800px matches `--content-width-prose` in the global styles.
+ */
+const SIZES = "(max-width: 880px) 100vw, 800px";
+
+/** Candidate srcset widths; any above the intrinsic width are dropped. */
+const WIDTHS = [640, 960, 1280, 1600];
+
+type Props = {
+  src: ImageMetadata;
+  alt: string;
+  /** Extra class for the caller's spacing; the frame is applied here. */
+  class?: string;
+  preload?: boolean;
+};
+
+const { src, alt, class: className, preload = false } = Astro.props;
+---
+
+<Picture
+  class={className ? `${styles.image} ${className}` : styles.image}
+  src={src}
+  alt={alt}
+  widths={WIDTHS.filter((candidate) => candidate <= src.width)}
+  sizes={SIZES}
+  formats={["avif", "webp"]}
+  priority={preload}
+/>

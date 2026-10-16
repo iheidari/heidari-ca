@@ -1,0 +1,56 @@
+---
+import PostBody from "@/components/PostBody.astro";
+import type { LocalPost } from "@/content/posts";
+import styles from "./PostReader.module.css";
+
+/**
+ * A post body with a full / short / tl;dr switch.
+ *
+ * The switch is a radio group and the panels are revealed by `:has(:checked)`
+ * rules in the stylesheet, so this ships no script and switching works with
+ * JavaScript off. Where `:has` is unsupported the editions simply stack —
+ * degraded, but nothing is lost. A post that ships only a full body renders
+ * the body alone, with no switch.
+ */
+type Props = { post: LocalPost };
+
+const { post } = Astro.props;
+const group = `edition-${post.slug}`;
+---
+
+{
+  post.editions.length === 1 ? (
+    <PostBody blocks={post.editions[0].blocks} />
+  ) : (
+    <div class={styles.reader}>
+      <fieldset class={styles.switch}>
+        <legend class={styles.legend}>Read as</legend>
+
+        {post.editions.map(({ mode, label, readingMinutes }) => (
+          // Direct children of the switch: a `display: contents` wrapper here
+          // breaks sibling style invalidation when the checked radio changes.
+          <Fragment>
+            <input
+              class={styles.input}
+              type="radio"
+              name={group}
+              id={`${group}-${mode}`}
+              value={mode}
+              checked={mode === "full"}
+            />
+            <label class={styles.label} for={`${group}-${mode}`}>
+              {label}
+              <span class={styles.time}>{readingMinutes} min</span>
+            </label>
+          </Fragment>
+        ))}
+      </fieldset>
+
+      {post.editions.map(({ mode, blocks }) => (
+        <div class={`${styles.panel} ${styles[mode]}`}>
+          <PostBody blocks={blocks} />
+        </div>
+      ))}
+    </div>
+  )
+}

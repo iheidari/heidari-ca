@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/opengraph-image",
+      "destination": "/opengraph-image.png",
+      "permanent": true
+    }
+  ]
+}

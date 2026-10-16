@@ -1,0 +1,45 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"a"> & { href: string };
+
+/** Schemes an authored `[label](href)` may use, and how each one opens. */
+const OUTBOUND = [
+  { scheme: "https:", newTab: true },
+  { scheme: "http:", newTab: true },
+  { scheme: "mailto:", newTab: false },
+];
+
+/*
+ * The one place that decides internal vs. external. Internal hrefs get a plain
+ * same-tab anchor; allowed outbound schemes get an anchor too, and outbound
+ * http(s) links always carry `rel="noreferrer noopener"`.
+ *
+ * Anything else — an unknown scheme, or a protocol-relative `//host` that
+ * would leave the site looking like an internal link — renders as plain text
+ * rather than a link.
+ */
+const { href, ...props } = Astro.props;
+
+const internal =
+  href.startsWith("#") || (href.startsWith("/") && !href.startsWith("//"));
+const allowed = internal
+  ? undefined
+  : OUTBOUND.find(({ scheme }) => href.startsWith(scheme));
+// Merged into one object so a caller's `target`/`rel` replaces the default;
+// Astro would otherwise emit both attributes.
+const attrs = {
+  ...(allowed?.newTab ? { target: "_blank", rel: "noreferrer noopener" } : {}),
+  ...props,
+};
+---
+
+{
+  internal || allowed ? (
+    <a href={href} {...attrs}>
+      <slot />
+    </a>
+  ) : (
+    <slot />
+  )
+}

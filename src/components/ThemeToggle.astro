@@ -1,0 +1,66 @@
+---
+import MoonIcon from "@/components/icons/MoonIcon.astro";
+import SunIcon from "@/components/icons/SunIcon.astro";
+import styles from "./ThemeToggle.module.css";
+
+// The build can't know the visitor's theme, so aria-pressed starts false and
+// the script below corrects it. The icon swap is pure CSS off `data-theme`.
+---
+
+<button
+  type="button"
+  class={styles.toggle}
+  data-theme-toggle
+  aria-label="Toggle dark theme"
+  aria-pressed="false"
+  title="Toggle dark theme"
+>
+  <span class={styles.icons}>
+    <SunIcon class={styles.sun} />
+    <MoonIcon class={styles.moon} />
+  </span>
+</button>
+
+<script>
+  import { THEME_STORAGE_KEY } from "@/lib/theme";
+
+  /*
+   * The `data-theme` attribute on <html> is the source of truth: the pre-paint
+   * script in lib/theme.ts sets it before this runs. Every toggle on the page
+   * mirrors it, so one bundled script serves any number of instances.
+   */
+  const root = document.documentElement;
+  const toggles = document.querySelectorAll<HTMLButtonElement>(
+    "[data-theme-toggle]",
+  );
+
+  function isDark() {
+    return root.getAttribute("data-theme") === "dark";
+  }
+
+  function sync() {
+    const pressed = String(isDark());
+    for (const toggle of toggles) toggle.setAttribute("aria-pressed", pressed);
+  }
+
+  for (const toggle of toggles) {
+    toggle.addEventListener("click", () => {
+      const next = isDark() ? "light" : "dark";
+
+      root.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, next);
+      } catch {
+        // Storage can be unavailable (private mode); the toggle still works.
+      }
+    });
+  }
+
+  // Observing rather than syncing in the click handler also catches anything
+  // else that changes the theme.
+  new MutationObserver(sync).observe(root, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  sync();
+</script>
