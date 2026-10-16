@@ -6,7 +6,8 @@ export default defineConfig({
   // `/blog` and `/blog/slug`, never `/blog/` — the URLs the Next build served,
   // and the form the sitemap and canonicals use.
   trailingSlash: "never",
-  build: { format: "file" },
+  // The site's CSS is a few KB; inlining it removes render-blocking requests.
+  build: { format: "file", inlineStylesheets: "always" },
   // tsconfig's `@/*` only reaches JS imports; CSS-module `composes` needs it here.
   vite: {
     resolve: {

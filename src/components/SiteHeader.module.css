@@ -77,8 +77,14 @@
 }
 
 @media (max-width: 600px) {
+  /* Visually hidden, not display: none — it is the brand link's accessible name. */
   .brandName {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .navLink {
