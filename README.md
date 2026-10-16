@@ -32,7 +32,7 @@ Copy that changes often lives in plain TypeScript files — no CMS needed:
 
 - `src/content/site.ts` — name, role, tagline, intro, email, socials, tech stack, availability badge, and the section headings/leads used on the home and blog pages
 - `src/content/projects.ts` — portfolio entries (title, summary, year, tags, optional repo/live/App Store/Google Play links)
-- `src/content/posts/` — one file per post, collected in `index.ts` and exported pre-sorted (newest first) alongside `localPosts`, so no route re-sorts or re-scans
+- `src/content/posts/` — one file per post, collected in `index.ts` and exported pre-sorted (newest first) alongside `localPosts`, so no route re-sorts or re-scans. Each post's slug and date live in `meta.ts` (keyed in `postMeta`), which the sitemap reads for `lastmod`; `index.ts` fails the build if `postMeta` and the local posts drift apart
 
 A post is either `kind: "local"` with a `body`, or `kind: "external"` with an
 `href` — there is no bodyless state, so `/blog/[slug]` never renders a
@@ -82,7 +82,7 @@ and Open Graph fields from those and the page's own path. The share card is
 ## Structure
 
 ```
-src/pages/       routes, robots/sitemap/OG image endpoints
+src/pages/       routes, robots/OG image endpoints (sitemap: @astrojs/sitemap)
 src/layouts/     base layout and page metadata
 src/components/  header, footer, cards, icons, theme toggle, SmartLink
 src/content/     site copy, projects, posts

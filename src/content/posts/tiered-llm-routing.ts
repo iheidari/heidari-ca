@@ -5,14 +5,14 @@ import priceBoughtNothingImage from "@/assets/images/blog/tiered-llm-routing/pri
 import silentFailuresImage from "@/assets/images/blog/tiered-llm-routing/silent-failures.png";
 import threeTiersImage from "@/assets/images/blog/tiered-llm-routing/three-tiers.png";
 import type { LocalSource } from "./index";
+import { postMeta } from "./meta";
 
 export const tieredLlmRouting: LocalSource = {
   kind: "local",
-  slug: "benchmarking-12-llms-tiered-routing",
+  ...postMeta.tieredLlmRouting,
   title: "We benchmarked 12 LLMs to pick one. We ended up picking three.",
   excerpt:
     "A scored benchmark of 12 models for Milemark’s natural-language search ended in a three-tier router: measured costs, a heuristic that died against the data, and $0.014 per user per day.",
-  date: "2026-09-10",
   cover: coverImage,
   lead: "How a simple question — “which model should we use?” — turned into a carrier-style tiering system, and what the data did to our assumptions along the way.",
   body: [

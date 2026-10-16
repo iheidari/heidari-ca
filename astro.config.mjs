@@ -1,5 +1,17 @@
 import { fileURLToPath } from "node:url";
+import sitemap from "@astrojs/sitemap";
 import { defineConfig, fontProviders } from "astro/config";
+import { postMeta } from "./src/content/posts/meta.ts";
+import { postDate } from "./src/lib/date.ts";
+
+// Sitemap `lastmod` per post path; other pages have no meaningful date.
+// Built here, not in `serialize`, whose errors the integration swallows.
+const postLastmod = new Map(
+  Object.values(postMeta).map(({ slug, date }) => [
+    `/blog/${slug}`,
+    postDate(date).toISOString(),
+  ]),
+);
 
 export default defineConfig({
   site: "https://heidari.ca",
@@ -35,5 +47,13 @@ export default defineConfig({
       subsets: ["latin"],
       fallbacks: ["monospace"],
     },
+  ],
+  integrations: [
+    sitemap({
+      serialize: (item) => ({
+        ...item,
+        lastmod: postLastmod.get(new URL(item.url).pathname),
+      }),
+    }),
   ],
 });

@@ -2,18 +2,17 @@ import type { ImageMetadata } from "astro";
 import type { PostBlock } from "./blocks";
 import { readingMinutes } from "./blocks";
 import { placeSearch } from "./designing-place-search";
+import { type PostMeta, postMeta } from "./meta";
 import { smallLlmComparison } from "./small-llm-comparison";
 import { tieredLlmRouting } from "./tiered-llm-routing";
 import { tryingJev } from "./trying-jev";
 
 export type { PostBlock } from "./blocks";
 
-type PostBase = {
-  slug: string;
+type PostBase = PostMeta & {
   title: string;
   /** Card copy and the route's meta description. */
   excerpt: string;
-  date: string; // ISO date (YYYY-MM-DD)
 };
 
 /**
@@ -113,3 +112,14 @@ export const posts: readonly Post[] = entries
 export const localPosts: readonly LocalPost[] = posts.filter(
   (post): post is LocalPost => post.kind === "local",
 );
+
+// The sitemap reads `lastmod` from `postMeta`, not from the posts; see meta.ts.
+const metaKeys = new Set(
+  Object.values(postMeta).map(({ slug, date }) => `${slug}@${date}`),
+);
+if (
+  metaKeys.size !== localPosts.length ||
+  localPosts.some(({ slug, date }) => !metaKeys.has(`${slug}@${date}`))
+) {
+  throw new Error("postMeta in meta.ts is out of sync with the local posts");
+}

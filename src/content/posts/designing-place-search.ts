@@ -5,6 +5,7 @@ import searchSectionsImage from "@/assets/images/blog/place-search/search-sectio
 import zoomGateImage from "@/assets/images/blog/place-search/zoom-gate.png";
 import type { PostBlock } from "./blocks";
 import type { LocalSource } from "./index";
+import { postMeta } from "./meta";
 
 /**
  * The sourcing note closes every edition. Shared rather than retyped, so the
@@ -20,11 +21,10 @@ const numbersNote: PostBlock = {
 
 export const placeSearch: LocalSource = {
   kind: "local",
-  slug: "designing-place-search-geonames",
+  ...postMeta.placeSearch,
   title: "The feature I thought would take a weekend",
   excerpt:
     "Adding place search to a camping app looked like a table and a text query. Four measurements against the GeoNames dumps demolished the design that sounded obviously right.",
-  date: "2026-09-09",
   cover: coverImage,
   lead: "How four measurements demolished a design that sounded obviously right.",
   body: [
